@@ -77,9 +77,10 @@ class VTUpdateFieldsTask extends VTTask {
 			$entityData = VTEntityData::fromCRMEntity($focus);
 			$entityData->isNew = $entity->isNew();
 
+			// 新規作成でも、項目が変わると保存後に setNewEntity() を呼ぶので、ここで作っておく
+			$vtEntityDelta = new VTEntityDelta();
 			if(!$entity->isNew()){
 				// 編集の場合、且つoldEntityがない場合、oldEntityを設定する。
-				$vtEntityDelta = new VTEntityDelta();
 				$oldEntity = $vtEntityDelta->getOldEntity($moduleName, $entityData->getId());
 				if(!$oldEntity){
 					$vtEntityDelta->handleEvent("vtiger.entity.beforesave", $entityData);
